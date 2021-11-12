@@ -1,3 +1,3 @@
 # LBP
 
-Testing Lbp with
+Test LBP
