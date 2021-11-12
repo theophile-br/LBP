@@ -27,11 +27,15 @@ int lbp_encode_pixel(Mat img, int x, int y) {
     return decimal_value;
 }
 
-Mat gray2LBPMat(Mat &img) {
+Mat img_2_lbp_mat(Mat &img) {
+    Mat channel[img.channels()];
+    split(img, channel);
     vector<uchar> pblImg;
-    for (int y = 1; y < img.rows - 1; y++) {
-        for (int x = 1; x < img.cols - 1; x++) {
-            pblImg.push_back(lbp_encode_pixel(img, x, y));
+    for (int c = 0; c < img.channels(); c++) {
+        for (int y = 1; y < channel[c].rows - 1; y++) {
+            for (int x = 1; x < channel[c].cols - 1; x++) {
+                pblImg.push_back(lbp_encode_pixel(channel[c], x, y));
+            }
         }
     }
     Mat my_mat(img.rows - 2, img.cols - 2, CV_8UC1, pblImg.data());
@@ -44,7 +48,7 @@ void img_2_lbp_hist(Mat &img, float lbpHist[256]) {
     for (int c = 0; c < img.channels(); c++) {
         for (int y = 1; y < channel[c].rows - 1; y++) {
             for (int x = 1; x < channel[c].cols - 1; x++) {
-                int decimal_value = lbp_encode_pixel(img, x, y);
+                int decimal_value = lbp_encode_pixel(channel[c], x, y);
                 lbpHist[decimal_value] = lbpHist[decimal_value] + 1;
             }
         }

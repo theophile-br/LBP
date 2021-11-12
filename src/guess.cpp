@@ -89,6 +89,7 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
             bestCandidatLabelId = txt_vector_get_type(line);
         }
     }
+    
     descriptorFile.close();
     time_t end = time(0);
     double ltmDif = difftime(end, start);
