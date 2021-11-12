@@ -23,4 +23,6 @@ std::string int_array_join(int array[], int size, char del);
 
 std::string float_array_join(float array[], int size, char del);
 
+float float_array_sum(float array[], int size);
+
 #endif //ROCK_CLASS_AI_UTILS_H

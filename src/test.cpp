@@ -90,24 +90,24 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
             minError[3] = -1.0f;
             Mat currentImg = imread(p.path(), IMREAD_GRAYSCALE);
             float testDescriptorVector[256] = {0};
-            gray_img_2_lbp_hist(currentImg, testDescriptorVector);
+            img_2_lbp_hist(currentImg, testDescriptorVector);
             while (getline(descriptorFile, line)) {
                 float trainDescriptorVector[256] = {0};
-                gray_txt_vector_2_vector(line, trainDescriptorVector);
+                txt_vector_2_vector(line, trainDescriptorVector);
                 result[0] = sad(trainDescriptorVector, testDescriptorVector);
                 result[1] = chisquare(trainDescriptorVector, testDescriptorVector);
                 result[2] = bhattacharyya(trainDescriptorVector, testDescriptorVector);
                 for (int i = 0; i < number_of_distance_formula - 1; i++) {
                     if (minError[i] > result[i]) {
                         minError[i] = result[i];
-                        bestCandidatLabelId[i] = gray_txt_vector_get_type(line);
+                        bestCandidatLabelId[i] = txt_vector_get_type(line);
                     }
                 }
                 // CORELATION SPECIAL LOGIC
                 result[3] = correlation(trainDescriptorVector, testDescriptorVector);
                 if (minError[3] < result[3]) {
                     minError[3] = result[3];
-                    bestCandidatLabelId[3] = gray_txt_vector_get_type(line);
+                    bestCandidatLabelId[3] = txt_vector_get_type(line);
                 }
             }
             numberOfImageProcess++;
@@ -130,10 +130,6 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
     }
     // CSV RESULT
     ofstream outfile;
-    stringstream dataStreamString;
-    dataStreamString.str(string());
-    time_t now = time(0);
-    tm *ltm = localtime(&now);
     // COMPUTE RATIO
     for (int i = 0; i < number_of_distance_formula; i++) {
         success[i] = success[i] / numberOfImageProcess * 100;

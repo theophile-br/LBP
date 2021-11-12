@@ -7,16 +7,16 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
-void gray_img_2_lbp_hist(cv::Mat &img, float lbpHist[256]);
+void img_2_lbp_hist(cv::Mat &img, float lbpHist[256]);
 
 int lbp_encode_pixel(cv::Mat img, int x, int y);
 
-void gray_txt_vector_2_vector(std::string descriptor, float v[256]);
-
 void normalize_hist(cv::Mat &img, float lbpHist[256]);
 
-int gray_txt_vector_get_type(std::string descriptor);
+void txt_vector_2_vector(std::string descriptor, float v[256]);
 
-std::string gray_txt_vector_get_txt_histogram(std::string descriptor);
+int txt_vector_get_type(std::string descriptor);
+
+std::string txt_vector_get_txt_histogram(std::string descriptor);
 
 #endif

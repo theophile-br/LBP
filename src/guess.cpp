@@ -1,6 +1,7 @@
-#include "include/guess.h"
-#include "lbp.h"
-#include "formula.h"
+#include <guess.h>
+#include <lbp.h>
+#include <formula.h>
+#include <utils.h>
 #include <string>
 #include <iostream>
 #include <opencv2/core/core.hpp>
@@ -46,7 +47,7 @@ int main(int argc, char **argv) {
     } else {
         cvtColor(my_image, greyMat, COLOR_BGR2GRAY);
     }
-    cout << "\x1B[32m-- START PREDICTION --\033[0m" << endl;
+    cout << "\x1B[32m-- START GUESSING --\033[0m" << endl;
     cout << "\x1B[33mGUESSING IMAGE: \033[0m" << file_path << endl;
     guess(my_image, descriptor_path, label_path);
     return EXIT_SUCCESS;
@@ -73,20 +74,19 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
     if (!descriptorFile) {
         cout << "Cant Open Descriptor File" << endl;
     }
-    float result = 0;
-    float success = 0.0f;
+    float result;
     int bestCandidatLabelId = 0;
-    float minError = 1.79769e+308f;
-    cout << "START TESTING" << endl;
+    float minError = 3.40282347E+38f;
     float img_descriptor_vector[256] = {0};
-    gray_img_2_lbp_hist(my_image, img_descriptor_vector);
+    img_2_lbp_hist(my_image, img_descriptor_vector);
     while (getline(descriptorFile, line)) {
         float trainDescriptorVector[256] = {0};
-        gray_txt_vector_2_vector(line, trainDescriptorVector);
+        txt_vector_2_vector(line, trainDescriptorVector);
         result = sad(trainDescriptorVector, img_descriptor_vector);
+        cout << float_array_sum(trainDescriptorVector, 256) << endl;
         if (minError > result) {
             minError = result;
-            bestCandidatLabelId = gray_txt_vector_get_type(line);
+            bestCandidatLabelId = txt_vector_get_type(line);
         }
     }
     descriptorFile.close();

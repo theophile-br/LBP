@@ -74,14 +74,14 @@ void process_data(string path_to_dataset, string label) {
         if (!img.cols) {
             continue;
         }
-        Mat greyMat;
+        /*Mat greyMat;
         if (greyMat.channels() == 1) {
             greyMat = img;
         } else {
             cvtColor(img, greyMat, COLOR_BGR2GRAY);
-        }
+        }*/
         create_directories(writePath);
-        imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), greyMat);
+        imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
         i++;
         cout << "\r" << (int) ((float) i / (float) maxfile * 100) << "% : " << p.path().filename();
     }

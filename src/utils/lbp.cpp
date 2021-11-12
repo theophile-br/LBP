@@ -38,18 +38,22 @@ Mat gray2LBPMat(Mat &img) {
     return my_mat;
 }
 
-void gray_img_2_lbp_hist(Mat &img, float lbpHist[256]) {
-    for (int y = 1; y < img.rows - 1; y++) {
-        for (int x = 1; x < img.cols - 1; x++) {
-            int decimal_value = lbp_encode_pixel(img, x, y);
-            lbpHist[decimal_value] = lbpHist[decimal_value] + 1;
+void img_2_lbp_hist(Mat &img, float lbpHist[256]) {
+    Mat channel[img.channels()];
+    split(img, channel);
+    for (int c = 0; c < img.channels(); c++) {
+        for (int y = 1; y < channel[c].rows - 1; y++) {
+            for (int x = 1; x < channel[c].cols - 1; x++) {
+                int decimal_value = lbp_encode_pixel(img, x, y);
+                lbpHist[decimal_value] = lbpHist[decimal_value] + 1;
+            }
         }
     }
     normalize_hist(img, lbpHist);
 }
 
-void gray_txt_vector_2_vector(string descriptor, float v[256]) {
-    descriptor = gray_txt_vector_get_txt_histogram(descriptor);
+void txt_vector_2_vector(string descriptor, float v[256]) {
+    descriptor = txt_vector_get_txt_histogram(descriptor);
     string delimiter = ",";
     size_t pos = 0;
     string token;
@@ -64,24 +68,23 @@ void gray_txt_vector_2_vector(string descriptor, float v[256]) {
     v[255] = stof(token.c_str());
 }
 
-int gray_txt_vector_get_type(string descriptor) {
+int txt_vector_get_type(string descriptor) {
     string delimiterType = ":";
     size_t pos = descriptor.find(delimiterType);
     string type = descriptor.erase(0, pos + delimiterType.length());
     return atoi(type.c_str());
 }
 
-string gray_txt_vector_get_txt_histogram(string descriptor) {
+string txt_vector_get_txt_histogram(string descriptor) {
     string delimiterType = ":";
     size_t pos = descriptor.find(delimiterType);
     return descriptor.substr(0, pos);
 }
 
 void normalize_hist(Mat &img, float lbpHist[256]) {
-    float float_lbp_hist[256];
-    int imgSurface = img.cols * img.rows;
+    int imgSurface = img.cols * img.rows * img.channels();
     for (int i = 0; i < 256; i++) {
-        lbpHist[i] = (float) lbpHist[i] / (float) imgSurface;
+        lbpHist[i] = lbpHist[i] / (float) imgSurface;
     };
 }
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <string>
 
-void train(std::string path_to_dataset);
+void train(std::string path_to_train);
 
 void process_descriptor_for_label(std::string path, int labelId, std::ofstream *file);
 

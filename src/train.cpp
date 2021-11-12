@@ -36,12 +36,12 @@ int main(int argc, char **argv) {
     return EXIT_SUCCESS;
 }
 
-void train(string path_to_dataset) {
+void train(string path_to_train) {
     cout << "\x1B[32m-- START TRAINING --\033[0m" << endl;
-    cout << "\x1B[33mDATASET FOLDER: \033[0m" << path_to_dataset << endl;
-    produce_label_file(path_to_dataset);
+    cout << "\x1B[33mDATASET FOLDER: \033[0m" << path_to_train << endl;
+    produce_label_file(path_to_train);
     // Read Label (value and length) from text file
-    ifstream labelsFile(path(path_to_dataset) / path("..") / path(LABEL_FILE));
+    ifstream labelsFile(path(path_to_train) / path("..") / path(LABEL_FILE));
     if (!labelsFile) {
         cout << "Cant Open Descriptor File" << endl;
     }
@@ -55,11 +55,11 @@ void train(string path_to_dataset) {
         labels[i] = line;
     labelsFile.close();
     ofstream outfile;
-    string descriptorPath = path(path_to_dataset) / path("..") / path(DESCRIPTOR_FILE);
+    string descriptorPath = path(path_to_train) / path("..") / path(DESCRIPTOR_FILE);
     outfile.open(descriptorPath, ofstream::trunc);
     for (int i = 0; i < labelsLength; i++) {
         cout << "\x1B[32m--      TYPE: " << labels[i] << "      --\033[0m" << endl;
-        process_descriptor_for_label(path(path_to_dataset) / path(labels[i]), i, &outfile);
+        process_descriptor_for_label(path(path_to_train) / path(labels[i]), i, &outfile);
     }
     outfile.close();
 };
@@ -74,12 +74,10 @@ void process_descriptor_for_label(std::string path, int labelId, ofstream *file)
         count++;
         cout << flush << "\r"
              << (int) ((float) count / (float) maxfile * 100) << "%";
-        Mat img = imread(p.path(), IMREAD_GRAYSCALE);
+        Mat img = imread(p.path());
         float pblHist[256] = {0};
-        data.clear();
-        data.str(std::string());
-        gray_img_2_lbp_hist(img, pblHist);
-        //normalize_hist(img,pblHist);
+        data.str(string());
+        img_2_lbp_hist(img, pblHist);
         for (int i = 0; i < 256; i++) {
             data << pblHist[i];
             if (i != 256 - 1) {
