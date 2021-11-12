@@ -39,7 +39,13 @@ int main(int argc, char **argv) {
         cout << "Wrong arguments" << endl;
         return EXIT_FAILURE;
     }
-    Mat my_image = imread(file_path, IMREAD_GRAYSCALE);
+    Mat my_image = imread(file_path);
+    Mat greyMat;
+    if (greyMat.channels() == 1) {
+        greyMat = my_image;
+    } else {
+        cvtColor(my_image, greyMat, COLOR_BGR2GRAY);
+    }
     cout << "\x1B[32m-- START PREDICTION --\033[0m" << endl;
     cout << "\x1B[33mGUESSING IMAGE: \033[0m" << file_path << endl;
     guess(my_image, descriptor_path, label_path);
