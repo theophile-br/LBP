@@ -74,12 +74,6 @@ void process_data(string path_to_dataset, string label) {
         if (!img.cols) {
             continue;
         }
-        /*Mat greyMat;
-        if (greyMat.channels() == 1) {
-            greyMat = img;
-        } else {
-            cvtColor(img, greyMat, COLOR_BGR2GRAY);
-        }*/
         create_directories(writePath);
         imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
         i++;
@@ -100,7 +94,6 @@ void analysis_dataset(string path_to_dataset) {
     }
     string test[labelLength];
     string train[labelLength];
-    string total[labelLength];
 
     string pathToProcess = path(path_to_dataset) / path("..") / path(PROCESS);
     for (int i = 0; i < labelLength; i++) {
@@ -110,16 +103,15 @@ void analysis_dataset(string path_to_dataset) {
                 path(pathToProcess) / path(TRAIN) / path(labels[i]));
         test[i] = to_string(ntest);
         train[i] = to_string(ntrain);
-        total[i] = to_string(ntest + ntrain);
     }
     stringstream ss;
     ss.str();
-    ss << "DATA," << string_array_join(labels, labelLength, ',') << "\n";
-    ss << "TRAIN," << string_array_join(train, labelLength, ',') << "\n";
-    ss << "TEST," << string_array_join(test, labelLength, ',') << "\n";
-    ss << "TOTAL," << string_array_join(total, labelLength, ',') << "\n";
+    ss << "label," << string_array_join(labels, labelLength, ',') << "\n";
+    ss << toLowerCase(TRAIN) << "," << string_array_join(train, labelLength, ',') << "\n";
+    ss << toLowerCase(TRAIN) << "," << string_array_join(test, labelLength, ',') << "\n";
     ofstream outfile;
-    outfile.open(path(path_to_dataset) / path("..") / path(PROCESS) / path("dataset_distribution.csv"),
+    create_directories(path(path_to_dataset) / path("..") / path(GRAPH));
+    outfile.open(path(path_to_dataset) / path("..") / path(PROCESS) / path(GRAPH) / path("dataset_distribution.csv"),
                  ofstream::trunc);
     outfile << ss.str().c_str();
     outfile.close();

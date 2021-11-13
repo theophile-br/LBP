@@ -139,7 +139,7 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
     stringstream ss;
     ss << string_array_join(label_distance_formula, number_of_distance_formula, ',') << endl;
     ss << float_array_join(success, number_of_distance_formula, ',') << endl;
-    outfile.open(path(path_to_dataset) / path("..") / path("distance_success_rate.csv"), ofstream::trunc);
+    outfile.open(path(path_to_dataset) / path("..") / path(GRAPH) / path("distance_success_rate.csv"), ofstream::trunc);
     outfile << ss.str();
     outfile.close();
 
@@ -151,7 +151,7 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
             ss << labels[i] << ","
                << int_array_join(confusion_matrice[d][i], labels_length, ',') << endl;
         }
-        outfile.open(path(path_to_dataset) / path("..") /
+        outfile.open(path(path_to_dataset) / path("..") / path(GRAPH) /
                      path(toLowerCase(label_distance_formula[d]) + "_confusion_matrice.csv"),
                      ofstream::trunc);
         outfile << ss.str();

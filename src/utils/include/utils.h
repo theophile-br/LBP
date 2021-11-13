@@ -10,6 +10,7 @@
 static const std::string TRAIN("TRAIN");
 static const std::string PROCESS("PROCESS");
 static const std::string TEST("TEST");
+static const std::string GRAPH("graph");
 static const std::string DESCRIPTOR_FILE("descriptor.txt");
 static const std::string LABEL_FILE("label.txt");
 

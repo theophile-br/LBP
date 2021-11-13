@@ -1,29 +1,28 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import colors
-from matplotlib.ticker import PercentFormatter
 
 import csv
 
-label = [];
+csv_data = []
+width = 0.35
 
-with open('../dataset/PROCESS/dataset_distribution.csv') as csv_file:
+with open('../dataset/PROCESS/graph/dataset_distribution.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
     for row in csv_reader:
-        if line_count == 0:
-            label = np.asarray(row)[1:]
-            print(label)
-            line_count += 1
-        else:
-            print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
-            line_count += 1
-print(f'Processed {line_count} lines.')
+        csv_data.append(row)
 
-y = []
+y = np.asarray(csv_data)[:1, 1:][0]  # test / train
+x = np.asarray(csv_data)[1:, :1].flatten()  # label
+data = np.asarray(csv_data)[1:, 1:].astype(int)  # data
 
-fig, axs = plt.subplots(1, 2, sharey=True, tight_layout=True)
+fig, ax = plt.subplots()
+for i in range(0, len(x)):
+    ax.bar(y, data[i], width, label=x[i])
 
-# We can set the number of bins with the `bins` kwarg
-axs[0].hist(y, bins=1)
-axs[1].hist(y, bins=1)
+ax.legend()
+plt.title("Dataset distribution")
+plt.xlabel("Label")
+plt.ylabel("Total")
+
+# plt.show()
+plt.savefig('../dataset/PROCESS/graph/dataset_distribution.jpg')
