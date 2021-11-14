@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
     Mat my_image = imread(file_path);
-    cout << "\x1B[32m-- START GUESSING --\033[0m" << endl;
-    cout << "\x1B[33mGUESSING IMAGE: \033[0m" << file_path << endl;
+    cout << "\x1B[32m-- START SEGMENTATION --\033[0m" << endl;
+    cout << "\x1B[33mSEGMENT IMAGE: \033[0m" << file_path << endl;
     segment(my_image, descriptor_path, label_path);
     return EXIT_SUCCESS;
 }
@@ -85,6 +85,35 @@ void segment(Mat src, string path_to_descriptor, string path_to_label) {
     imwrite(current_path() / path("segmentation.jpg"), src);
     //imshow("SRC", src);
     //waitKey();
+
+    //PRODUCE LABEL COLOR CORRESPONDENCE
+    ifstream labelsFile(path_to_label);
+    if (!labelsFile) {
+        cout << "Cant Open Label File" << endl;
+        exit(EXIT_FAILURE);
+    }
+    std::string line;
+    int labels_length = 0;
+    for (; std::getline(labelsFile, line); ++labels_length);
+    labelsFile.clear();
+    labelsFile.seekg(0, ios::beg);
+    string *labels = new string[labels_length];
+    for (int i = 0; std::getline(labelsFile, line); ++i)
+        labels[i] = line;
+    labelsFile.close();
+    int rect_size = 25;
+    int padding_bottom = 50;
+    int padding_left = 20;
+    Mat img_label(500, 500, CV_8UC3);
+    for (int i = 0; i < labels_length; i++) {
+        rectangle(img_label, Rect(0, i * padding_bottom, rect_size, rect_size), palette[i], -1);
+        putText(img_label, labels[i], Point(rect_size + padding_left, (i * padding_bottom) + rect_size / 2),
+                FONT_HERSHEY_PLAIN,
+                1,
+                palette[i],
+                1);
+    }
+    imwrite(path(current_path()) / path("segmentatin_label.jpg"), img_label);
 }
 
 int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
