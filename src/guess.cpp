@@ -1,7 +1,6 @@
 #include <guess.h>
 #include <lbp.h>
 #include <formula.h>
-#include <utils.h>
 #include <string>
 #include <iostream>
 #include <opencv2/core/core.hpp>
@@ -41,15 +40,10 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
     Mat my_image = imread(file_path);
-    Mat greyMat;
-    if (greyMat.channels() == 1) {
-        greyMat = my_image;
-    } else {
-        cvtColor(my_image, greyMat, COLOR_BGR2GRAY);
-    }
     cout << "\x1B[32m-- START GUESSING --\033[0m" << endl;
     cout << "\x1B[33mGUESSING IMAGE: \033[0m" << file_path << endl;
     guess(my_image, descriptor_path, label_path);
+    img_process_details(my_image);
     return EXIT_SUCCESS;
 }
 
@@ -83,13 +77,12 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
         float trainDescriptorVector[256] = {0};
         txt_vector_2_vector(line, trainDescriptorVector);
         result = sad(trainDescriptorVector, img_descriptor_vector);
-        cout << float_array_sum(trainDescriptorVector, 256) << endl;
         if (minError > result) {
             minError = result;
             bestCandidatLabelId = txt_vector_get_type(line);
         }
     }
-    
+
     descriptorFile.close();
     time_t end = time(0);
     double ltmDif = difftime(end, start);
@@ -99,4 +92,10 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
          endl;
     cout << "I think is : " << labels[bestCandidatLabelId] << endl;
     return bestCandidatLabelId;
+}
+
+void img_process_details(cv::Mat img) {
+    img_2_lbp_mat(img);
+    //imshow("IMG", img_process);
+    //waitKey(0);
 }
