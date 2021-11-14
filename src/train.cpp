@@ -13,22 +13,22 @@ using namespace cv;
 using namespace filesystem;
 
 int main(int argc, char **argv) {
-    string dataset_path = path(current_path()) / path(PROCESS);
-    if (!is_directory(dataset_path)) {
+    string trainingset_path = path(current_path()) / path(PROCESS);
+    if (!is_directory(trainingset_path)) {
         cout << "PROCESS FOLDER NOT IN ROOT DIRECTORY" << endl;
         return EXIT_FAILURE;
     }
-    train(path(dataset_path) / path(TRAIN));
+    train(path(trainingset_path) / path(TRAIN));
     cout << "END";
     return EXIT_SUCCESS;
 }
 
-void train(string path_to_train) {
+void train(string trainingset_path) {
     cout << "\x1B[32m-- START TRAINING --\033[0m" << endl;
-    cout << "\x1B[33mDATASET FOLDER: \033[0m" << path_to_train << endl;
-    produce_label_file(path_to_train);
+    cout << "\x1B[33mDATASET FOLDER: \033[0m" << trainingset_path << endl;
+    produce_label_file(trainingset_path);
     // Read Label (value and length) from text file
-    ifstream labelsFile(path(path_to_train) / path("..") / path(LABEL_FILE));
+    ifstream labelsFile(path(trainingset_path) / path("..") / path(LABEL_FILE));
     if (!labelsFile) {
         cout << "Cant Open Descriptor File" << endl;
         exit(EXIT_FAILURE);
@@ -43,11 +43,11 @@ void train(string path_to_train) {
         labels[i] = line;
     labelsFile.close();
     ofstream outfile;
-    string descriptorPath = path(path_to_train) / path("..") / path(DESCRIPTOR_FILE);
+    string descriptorPath = path(trainingset_path) / path("..") / path(DESCRIPTOR_FILE);
     outfile.open(descriptorPath, ofstream::trunc);
     for (int i = 0; i < labelsLength; i++) {
         cout << "\x1B[32m--      TYPE: " << labels[i] << "      --\033[0m" << endl;
-        process_descriptor_for_label(path(path_to_train) / path(labels[i]), i, &outfile);
+        process_descriptor_for_label(path(trainingset_path) / path(labels[i]), i, &outfile);
     }
     outfile.close();
 };
