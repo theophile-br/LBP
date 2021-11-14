@@ -8,7 +8,7 @@
 
 void prepare(std::string path_to_dataset);
 
-void analysis_dataset(std::string path_to_dataset);
+void analysis_dataset(std::string path_to_process_dataset);
 
 void process_data(std::string path_to_dataset, std::string label);
 

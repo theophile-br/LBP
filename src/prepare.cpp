@@ -31,13 +31,15 @@ int main(int argc, char **argv) {
         cout << "Wrong arguments" << endl;
         return EXIT_FAILURE;
     }
+    cout << dataset_path << endl;
     prepare(dataset_path);
-    analysis_dataset(dataset_path);
+    analysis_dataset(path(current_path()) / path(PROCESS));
     cout << "\x1B[33m --     DONE     -- \033[0m" << endl;
     return 0;
 }
 
 void prepare(string path_to_dataset) {
+    string path_to_process = path(current_path()) / path(PROCESS);
     int labelLength = 0;
     for (const auto &entry: directory_iterator(path_to_dataset)) {
         if (is_directory(entry))
@@ -51,29 +53,28 @@ void prepare(string path_to_dataset) {
             i++;
         }
     }
-    remove_all(path(path_to_dataset) / path("..") / path(PROCESS));
+    remove_all(path_to_process);
     for (int i = 0; i < labelLength; i++) {
         process_data(path_to_dataset, labels[i]);
     }
 }
 
 void process_data(string path_to_dataset, string label) {
-    string completePath = path(path_to_dataset) / path(label);
-    int maxfile = count_image_in_directory(completePath);
+    string dataset_dest = path(current_path()) / path(PROCESS);
+    string dataset_src = path(path_to_dataset) / path(label);
+    int maxfile = count_image_in_directory(dataset_src);
     int i = 0;
     cout << "\x1B[33mPROCESS : " << label << "\033[0m" << endl;
-    for (auto &p: directory_iterator(completePath)) {
+    for (auto &p: directory_iterator(dataset_src)) {
         string writePath = "";
         if (i <= maxfile * TEST_RATIO) {
-            writePath = path(path_to_dataset) / path("..") / path(PROCESS) / path(TEST) / path(label);
+            writePath = path(dataset_dest) / path(TEST) / path(label);
         } else {
-            writePath = path(path_to_dataset) / path("..") / path(PROCESS) / path(TRAIN) / path(label);
+            writePath = path(dataset_dest) / path(TRAIN) / path(label);
         }
 
         Mat img = imread(p.path());
-        if (!img.cols) {
-            continue;
-        }
+        cvtColor(img, img, COLOR_BGR2GRAY);
         create_directories(writePath);
         imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
         i++;
@@ -82,25 +83,23 @@ void process_data(string path_to_dataset, string label) {
     cout << endl;
 }
 
-void analysis_dataset(string path_to_dataset) {
+void analysis_dataset(string path_to_process_dataset) {
     int labelLength = 0;
-    for (const auto &entry: directory_iterator(path_to_dataset))
+    for (const auto &entry: directory_iterator(path_to_process_dataset))
         labelLength++;
     string labels[labelLength];
     int i = 0;
-    for (const auto &entry: directory_iterator(path_to_dataset)) {
+    for (const auto &entry: directory_iterator(path_to_process_dataset)) {
         labels[i] = entry.path().filename();
         i++;
     }
     string test[labelLength];
     string train[labelLength];
-
-    string pathToProcess = path(path_to_dataset) / path("..") / path(PROCESS);
     for (int i = 0; i < labelLength; i++) {
         int ntest = count_image_in_directory(
-                path(pathToProcess) / path(TEST) / path(labels[i]));
+                path(path_to_process_dataset) / path(TEST) / path(labels[i]));
         int ntrain = count_image_in_directory(
-                path(pathToProcess) / path(TRAIN) / path(labels[i]));
+                path(path_to_process_dataset) / path(TRAIN) / path(labels[i]));
         test[i] = to_string(ntest);
         train[i] = to_string(ntrain);
     }
@@ -110,8 +109,8 @@ void analysis_dataset(string path_to_dataset) {
     ss << toLowerCase(TRAIN) << "," << string_array_join(train, labelLength, ',') << "\n";
     ss << toLowerCase(TRAIN) << "," << string_array_join(test, labelLength, ',') << "\n";
     ofstream outfile;
-    create_directories(path(path_to_dataset) / path("..") / path(GRAPH));
-    outfile.open(path(path_to_dataset) / path("..") / path(PROCESS) / path(GRAPH) / path("dataset_distribution.csv"),
+    create_directories(path(path_to_process_dataset) / path(GRAPH));
+    outfile.open(path(path_to_process_dataset) / path(GRAPH) / path("dataset_distribution.csv"),
                  ofstream::trunc);
     outfile << ss.str().c_str();
     outfile.close();
