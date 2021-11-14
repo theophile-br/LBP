@@ -82,8 +82,8 @@ void segment(Mat src, string path_to_descriptor, string path_to_label) {
     //waitKey();
     imwrite(current_path() / path("segmentation_mask.jpg"), dest);
     addWeighted(src, 0.5, dest, 0.5, 0.0, src);
-    imshow("SRC", src);
-    //imwrite(current_path() / path("segmentation.jpg"), src);
+    imwrite(current_path() / path("segmentation.jpg"), src);
+    //imshow("SRC", src);
     //waitKey();
 }
 
