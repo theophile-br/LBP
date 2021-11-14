@@ -13,22 +13,9 @@ using namespace cv;
 using namespace filesystem;
 
 int main(int argc, char **argv) {
-    string dataset_path;
-    if (argc == 1) {
-        cout << "No arguments" << endl;
-        return EXIT_FAILURE;
-    }
-    for (int i = 1; i < argc; ++i) {
-        if (string(argv[i]) == "--dataset" || string(argv[i]) == "-d") {
-            dataset_path = current_path().string() + "/" + argv[i + 1];
-            if (!is_directory(dataset_path)) {
-                cout << current_path().string() + "/" + dataset_path << " isn't a directory" << endl;
-                return EXIT_FAILURE;
-            }
-        }
-    }
-    if (empty(dataset_path)) {
-        cout << "Wrong arguments" << endl;
+    string dataset_path = path(current_path()) / path(PROCESS);
+    if (!is_directory(dataset_path)) {
+        cout << "PROCESS FOLDER NOT IN ROOT DIRECTORY" << endl;
         return EXIT_FAILURE;
     }
     train(path(dataset_path) / path(TRAIN));
@@ -44,6 +31,7 @@ void train(string path_to_train) {
     ifstream labelsFile(path(path_to_train) / path("..") / path(LABEL_FILE));
     if (!labelsFile) {
         cout << "Cant Open Descriptor File" << endl;
+        exit(EXIT_FAILURE);
     }
     std::string line;
     int labelsLength = 0;

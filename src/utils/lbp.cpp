@@ -30,7 +30,6 @@ int lbp_encode_pixel(Mat img, int x, int y, int cn) {
 Mat img_2_lbp_mat(Mat &img) {
     const int cn = img.channels();
     Mat my_mat((img.rows - 2), (img.cols - 2), CV_8UC3);
-    cout << img.channels() << endl;
     for (int y = 1; y < img.rows - 1; y++) {
         for (int x = 1; x < img.cols - 1; x++) {
             for (int c = 0; c < cn; c++) {
@@ -38,8 +37,6 @@ Mat img_2_lbp_mat(Mat &img) {
             }
         }
     }
-    imshow("IMG", my_mat);
-    waitKey(0);
     return my_mat;
 }
 

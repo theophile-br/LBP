@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     }
     for (int i = 1; i < argc; ++i) {
         if (string(argv[i]) == "--dataset" || string(argv[i]) == "-d") {
-            dataset_path = current_path().string() + "/" + argv[i + 1];
+            dataset_path = path(current_path().string()) / path(argv[i + 1]);
             if (!is_directory(dataset_path)) {
                 cout << current_path().string() + "/" + dataset_path << " isn't a directory" << endl;
                 return EXIT_FAILURE;
@@ -85,11 +85,11 @@ void process_data(string path_to_dataset, string label) {
 
 void analysis_dataset(string path_to_process_dataset) {
     int labelLength = 0;
-    for (const auto &entry: directory_iterator(path_to_process_dataset))
+    for (const auto &entry: directory_iterator(path(path_to_process_dataset) / path(TRAIN)))
         labelLength++;
     string labels[labelLength];
     int i = 0;
-    for (const auto &entry: directory_iterator(path_to_process_dataset)) {
+    for (const auto &entry: directory_iterator(path(path_to_process_dataset) / path(TRAIN))) {
         labels[i] = entry.path().filename();
         i++;
     }

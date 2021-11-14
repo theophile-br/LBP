@@ -6,6 +6,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <filesystem>
+#include <utils.h>
 
 using namespace std;
 using namespace cv;
@@ -52,6 +53,7 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
     ifstream labelsFile(path_to_label);
     if (!labelsFile) {
         cout << "Cant Open Label File" << endl;
+        exit(EXIT_FAILURE);
     }
     std::string line;
     int labels_length = 0;
@@ -67,6 +69,7 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
     ifstream descriptorFile(path_to_descriptor);
     if (!descriptorFile) {
         cout << "Cant Open Descriptor File" << endl;
+        exit(EXIT_FAILURE);
     }
     float result;
     int bestCandidatLabelId = 0;
@@ -95,7 +98,13 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
 }
 
 void img_process_details(cv::Mat img) {
-    img_2_lbp_mat(img);
-    //imshow("IMG", img_process);
-    //waitKey(0);
+    imwrite(path(current_path()) / path("lbp_process.jpg"), img_2_lbp_mat(img));
+    ofstream outfile;
+    outfile.open(path(current_path()) / path("lbp_process_histogram.csv"),
+                 ofstream::trunc);
+    float lbb_hist[256];
+    img_2_lbp_hist(img, lbb_hist);
+    outfile << float_array_join(lbb_hist, 256, ',').c_str();
+    outfile.close();
+
 }

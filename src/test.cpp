@@ -15,24 +15,9 @@ using namespace cv;
 using namespace filesystem;
 
 int main(int argc, char **argv) {
-    string dataset_path;
-    if (argc == 1) {
-        cout << "No arguments" << endl;
-        return EXIT_FAILURE;
-    }
-    for (int i = 1; i < argc; ++i) {
-        if (string(argv[i]) == "--dataset" || string(argv[i]) == "-d") {
-            dataset_path = current_path().string() + "/" + argv[i + 1];
-            if (!is_directory(dataset_path)) {
-                cout << current_path().string() + "/" + dataset_path << " isn't a directory" << endl;
-                return EXIT_FAILURE;
-            }
-        }
-        i++;
-    }
-
-    if (empty(dataset_path)) {
-        cout << "Wrong arguments" << endl;
+    string dataset_path = path(current_path()) / path(PROCESS);
+    if (!is_directory(dataset_path)) {
+        cout << "PROCESS FOLDER NOT IN ROOT DIRECTORY" << endl;
         return EXIT_FAILURE;
     }
     test(path(dataset_path) / path(TEST), path(dataset_path) / path(DESCRIPTOR_FILE),
@@ -48,6 +33,7 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
     ifstream labelsFile(path_to_label);
     if (!labelsFile) {
         cout << "Cant Open Label File" << endl;
+        exit(EXIT_FAILURE);
     }
     std::string line;
     int size = 0;
@@ -75,6 +61,7 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
     }
     if (!descriptorFile) {
         cout << "Cant Open Descriptor File" << endl;
+        exit(EXIT_FAILURE);
     }
     vector<float> result(number_of_distance_formula, 0);
     int numberOfImageProcess = 0;
@@ -88,7 +75,7 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
             int bestCandidatLabelId[4] = {0};
             vector<float> minError(number_of_distance_formula, 1.79769e+308);
             minError[3] = -1.0f;
-            Mat currentImg = imread(p.path(), IMREAD_GRAYSCALE);
+            Mat currentImg = imread(p.path());
             float testDescriptorVector[256] = {0};
             img_2_lbp_hist(currentImg, testDescriptorVector);
             while (getline(descriptorFile, line)) {
