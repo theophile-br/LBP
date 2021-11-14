@@ -12,7 +12,7 @@ add_executable(test src/test.cpp src/utils/lbp.cpp src/utils/formula.cpp src/uti
 add_executable(train src/train.cpp src/utils/lbp.cpp src/utils/utils.cpp)
 add_executable(guess src/guess.cpp src/utils/lbp.cpp src/utils/formula.cpp src/utils/utils.cpp)
 add_executable(prepare src/prepare.cpp src/utils/lbp.cpp src/utils/utils.cpp)
-add_executable(segmentation src/segmentation.cpp src/prepare.cpp src/utils/lbp.cpp src/utils/utils.cpp)
+add_executable(segmentation src/segmentation.cpp src/utils/formula.cpp src/utils/lbp.cpp src/utils/utils.cpp)
 
 target_link_libraries(test ${OpenCV_LIBS})
 target_link_libraries(train ${OpenCV_LIBS})
