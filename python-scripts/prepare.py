@@ -1,12 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import os
 import csv
+
+program_path = os.path.dirname(os.path.abspath(__file__))
 
 csv_data = []
 width = 0.35
 
-with open('../dataset/PROCESS/graph/dataset_distribution.csv') as csv_file:
+with open(os.path.join(program_path, '..', 'PROCESS', 'graph', 'dataset_distribution.csv')) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     for row in csv_reader:
         csv_data.append(row)
@@ -25,4 +27,4 @@ plt.xlabel("Label")
 plt.ylabel("Total")
 
 # plt.show()
-plt.savefig('../dataset/PROCESS/graph/dataset_distribution.jpg')
+plt.savefig(os.path.join(program_path, '..', 'PROCESS', 'graph', 'dataset_distribution.jpg'))

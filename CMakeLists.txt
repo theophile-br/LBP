@@ -17,3 +17,5 @@ target_link_libraries(test ${OpenCV_LIBS})
 target_link_libraries(train ${OpenCV_LIBS})
 target_link_libraries(guess ${OpenCV_LIBS})
 target_link_libraries(prepare ${OpenCV_LIBS})
+
+file(COPY python-scripts DESTINATION ${CMAKE_BINARY_DIR})
