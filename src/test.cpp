@@ -75,7 +75,7 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
             int bestCandidatLabelId[4] = {0};
             vector<float> minError(number_of_distance_formula, 1.79769e+308);
             minError[3] = -1.0f;
-            Mat currentImg = imread(p.path());
+            Mat currentImg = imread(p.path(), IMREAD_GRAYSCALE);
             float testDescriptorVector[256] = {0};
             img_2_lbp_hist(currentImg, testDescriptorVector);
             while (getline(descriptorFile, line)) {

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <filesystem>
 #include "lbp.h"
+#include "utils.h"
 
 using namespace std;
 using namespace cv;
@@ -84,7 +85,7 @@ string txt_vector_get_txt_histogram(string descriptor) {
 void normalize_hist(Mat &img, float lbpHist[256]) {
     int imgSurface = img.cols * img.rows * img.channels();
     for (int i = 0; i < 256; i++) {
-        lbpHist[i] = lbpHist[i] / (float) imgSurface;
+        lbpHist[i] = roundoff(lbpHist[i] / (float) imgSurface, 20);
     };
 }
 

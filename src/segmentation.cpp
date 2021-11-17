@@ -11,6 +11,7 @@ using namespace std;
 using namespace cv;
 using namespace filesystem;
 
+// COLOR
 Scalar red = Scalar(57, 0, 199);
 Scalar yellow = Scalar(0, 195, 255);
 Scalar blue = Scalar(255, 221, 51);
@@ -22,7 +23,6 @@ Scalar pink = Scalar(150, 51, 255);
 Scalar brown = Scalar(0, 94, 164);
 
 vector<Scalar> palette = {red, yellow, blue, green, orange, purple, pink, brown, deep_blue};
-
 
 int main(int argc, char **argv) {
     string file_path;
@@ -64,6 +64,8 @@ void segment(Mat src, string path_to_descriptor, string path_to_label) {
     int width = src.cols;
     int height = src.rows;
     int GRID_SIZE = 60;
+    //int GRID_SIZE = 30;
+    //int GRID_SIZE = 15;
 
     vector<Mat> data;
     Mat dest = src.clone();

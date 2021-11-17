@@ -84,7 +84,7 @@ void process_data(string path_to_dataset, string label) {
             // FLIP
             Mat flip_img = img.clone();
             flip(img, flip_img, 0);
-            imwrite(path(writePath) / path(to_string(i) + "_flip" + p.path().extension().string()), img);
+            imwrite(path(writePath) / path(to_string(i) + "_flip" + p.path().extension().string()), flip_img);
             // NOISE
             Mat noise_img = img.clone();
             Mat mSrc_16SC;

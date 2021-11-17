@@ -3,6 +3,7 @@
 //
 #include "filesystem"
 #include "utils.h"
+#include <math.h>
 
 using namespace std;
 using namespace filesystem;
@@ -72,4 +73,9 @@ float float_array_sum(float array[], int size) {
         total += array[i];
     }
     return total;
+}
+
+float roundoff(float value, unsigned char prec) {
+    float pow_10 = pow(10.0f, (float) prec);
+    return round(value * pow_10) / pow_10;
 }
