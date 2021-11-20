@@ -113,7 +113,7 @@ void analysis_dataset(string path_to_process_dataset) {
     ss.str();
     ss << "label," << string_array_join(labels, labelLength, ',') << "\n";
     ss << toLowerCase(TRAIN) << "," << string_array_join(train, labelLength, ',') << "\n";
-    ss << toLowerCase(TRAIN) << "," << string_array_join(test, labelLength, ',') << "\n";
+    ss << toLowerCase(TEST) << "," << string_array_join(test, labelLength, ',') << "\n";
     ofstream outfile;
     create_directories(path(path_to_process_dataset) / path(GRAPH));
     outfile.open(path(path_to_process_dataset) / path(GRAPH) / path("dataset_distribution.csv"),
