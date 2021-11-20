@@ -78,26 +78,10 @@ void process_data(string path_to_dataset, string label) {
             continue;
         }
         create_directories(writePath);
-        imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
-        bool augmentation_du_jeu_de_donnees = false;
-        if (augmentation_du_jeu_de_donnees) {
-            // FLIP
-            Mat flip_img = img.clone();
-            flip(img, flip_img, 0);
-            imwrite(path(writePath) / path(to_string(i) + "_flip" + p.path().extension().string()), flip_img);
-            // NOISE
-            Mat noise_img = img.clone();
-            Mat mSrc_16SC;
-            Mat mGaussian_noise = Mat(img.size(), CV_16SC3);
-            randn(mGaussian_noise, Scalar::all(0.0), Scalar::all(10.0));
-            img.convertTo(mSrc_16SC, CV_16SC3);
-            addWeighted(mSrc_16SC, 1.0, mGaussian_noise, 1.0, 0.0, mSrc_16SC);
-            mSrc_16SC.convertTo(noise_img, img.type());
-            imwrite(path(writePath) / path(to_string(i) + "_noise" + p.path().extension().string()), noise_img);
-            // BLUR
-            Mat blur_img = img.clone();
-            GaussianBlur(img, blur_img, Size(5, 5), 0);
-            imwrite(path(writePath) / path(to_string(i) + "_blur" + p.path().extension().string()), blur_img);
+        try {
+            imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
+        } catch (const cv::Exception e) {
+            continue;
         }
         i++;
         cout << "\r" << (int) ((float) i / (float) maxfile * 100) << "% : " << p.path().filename();

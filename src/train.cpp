@@ -13,12 +13,12 @@ using namespace cv;
 using namespace filesystem;
 
 int main(int argc, char **argv) {
-    string trainingset_path = path(current_path()) / path(PROCESS);
+    string trainingset_path = path(current_path()) / path(PROCESS) / path(TRAIN);
     if (!is_directory(trainingset_path)) {
         cout << "PROCESS FOLDER NOT IN ROOT DIRECTORY" << endl;
         return EXIT_FAILURE;
     }
-    train(path(trainingset_path) / path(TRAIN));
+    train(trainingset_path);
     cout << "END";
     return EXIT_SUCCESS;
 }
