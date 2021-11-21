@@ -61,8 +61,11 @@ void process_descriptor_for_label(std::string path, int labelId, ofstream *file)
     for (auto &p: directory_iterator(path)) {
         count++;
         cout << flush << "\r"
-             << (int) ((float) count / (float) maxfile * 100) << "%";
+             << (int) ((float) count / (float) maxfile * 100) << "%" << " : " << p.path().filename();
         Mat img = imread(p.path(), IMREAD_GRAYSCALE);
+        if (img.empty()) {
+            continue;
+        }
         float pblHist[256] = {0};
         data.str(string());
         img_2_lbp_hist(img, pblHist);

@@ -76,6 +76,9 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
             vector<float> minError(number_of_distance_formula, 1.79769e+308);
             minError[3] = -1.0f;
             Mat currentImg = imread(p.path(), IMREAD_GRAYSCALE);
+            if (currentImg.empty()) {
+                continue;
+            }
             float testDescriptorVector[256] = {0};
             img_2_lbp_hist(currentImg, testDescriptorVector);
             while (getline(descriptorFile, line)) {
@@ -101,7 +104,8 @@ void test(string path_to_dataset, std::string path_to_descriptor, std::string pa
             //cout << " ----- " << endl;
             cout << flush << "\rDATASETS" << " " << currentLabel << " : " << numberOfImageProcess
                  << " images processed >> "
-                 << (int) ((double) numberOfImageProcess / (double) maxFile * 100) << "%";
+                 << (int) ((double) numberOfImageProcess / (double) maxFile * 100) << "%" << " : "
+                 << p.path().filename();;
             for (int i = 0; i < number_of_distance_formula; i++) {
                 if (bestCandidatLabelId[i] == currentLabelId) {
                     success[i] += 1;

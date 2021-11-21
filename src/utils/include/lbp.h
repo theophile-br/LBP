@@ -11,7 +11,7 @@ void img_2_lbp_hist(cv::Mat &img, float lbpHist[256]);
 
 cv::Mat img_2_lbp_mat(cv::Mat &img);
 
-int lbp_encode_pixel(cv::Mat img, int x, int y, int channel);
+int lbp_encode_pixel(cv::Mat img, int x, int y);
 
 void normalize_hist(cv::Mat &img, float lbpHist[256]);
 

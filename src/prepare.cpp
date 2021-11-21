@@ -74,15 +74,13 @@ void process_data(string path_to_dataset, string label) {
         }
 
         Mat img = imread(p.path());
+        Mat gray(img);
         if (img.empty()) {
             continue;
         }
+        cvtColor(img, gray, COLOR_RGB2GRAY);
         create_directories(writePath);
-        try {
-            imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
-        } catch (const cv::Exception e) {
-            continue;
-        }
+        imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
         i++;
         cout << "\r" << (int) ((float) i / (float) maxfile * 100) << "% : " << p.path().filename();
     }
