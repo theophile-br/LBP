@@ -63,17 +63,17 @@ void segment(Mat src, string path_to_descriptor, string path_to_label) {
 
     int width = src.cols;
     int height = src.rows;
-    int GRID_SIZE = 60;
+    //int GRID_SIZE = 60;
     //int GRID_SIZE = 30;
-    //int GRID_SIZE = 15;
+    int GRID_SIZE = 15;
 
     vector<Mat> data;
+    cout << endl;
     Mat dest = src.clone();
     for (int y = 0; y < height - GRID_SIZE; y += GRID_SIZE) {
         for (int x = 0; x < width - GRID_SIZE; x += GRID_SIZE) {
-            int k = x * y + x;
             Rect grid_rect(x, y, GRID_SIZE, GRID_SIZE);
-            cout << grid_rect << endl;
+            cout << flush << "\r" << grid_rect;
             int label = guess(src(grid_rect), path_to_descriptor, path_to_label);
             rectangle(dest, grid_rect, palette[label], -1);
             data.push_back(dest(grid_rect));
@@ -134,7 +134,6 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
     for (int i = 0; std::getline(labelsFile, line); ++i)
         labels[i] = line;
     labelsFile.close();
-    time_t start = time(0);
     //OPEN DESCRIPTOR FILE
     ifstream descriptorFile(path_to_descriptor);
     if (!descriptorFile) {
@@ -157,12 +156,6 @@ int guess(Mat my_image, string path_to_descriptor, string path_to_label) {
     }
 
     descriptorFile.close();
-    time_t end = time(0);
-    double ltmDif = difftime(end, start);
-    cout << "Time: " <<
-         to_string(ltmDif)
-         << "sec" <<
-         endl;
-    cout << "I think is : " << labels[bestCandidatLabelId] << endl;
+    cout << " I think is : " << labels[bestCandidatLabelId];
     return bestCandidatLabelId;
 }

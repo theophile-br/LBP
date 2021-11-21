@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
         cout << "PROCESS FOLDER NOT IN ROOT DIRECTORY" << endl;
         return EXIT_FAILURE;
     }
-    test(path(dataset_path) / path(TEST), path(dataset_path) / path(DESCRIPTOR_FILE),
+    test(path(dataset_path) / path(TRAIN), path(dataset_path) / path(DESCRIPTOR_FILE),
          path(dataset_path) / path(LABEL_FILE));
     cout << "END";
     return EXIT_SUCCESS;

@@ -51,7 +51,8 @@ void augment(string path_to_dataset) {
             // FLIP
             Mat flip_img = img.clone();
             flip(img, flip_img, 0);
-            imwrite(path(dataset_src) / path(to_string(c) + "_flip" + p.path().extension().string()), flip_img);
+            imwrite(path(dataset_src) / path(p.path().filename().string() + "_flip" + p.path().extension().string()),
+                    flip_img);
             // NOISE
             Mat noise_img = img.clone();
             Mat mSrc_16SC;
@@ -60,11 +61,13 @@ void augment(string path_to_dataset) {
             img.convertTo(mSrc_16SC, CV_16SC3);
             addWeighted(mSrc_16SC, 1.0, mGaussian_noise, 1.0, 0.0, mSrc_16SC);
             mSrc_16SC.convertTo(noise_img, img.type());
-            imwrite(path(dataset_src) / path(to_string(c) + "_noise" + p.path().extension().string()), noise_img);
+            imwrite(path(dataset_src) / path(p.path().filename().string() + "_noise" + p.path().extension().string()),
+                    noise_img);
             // BLUR
             Mat blur_img = img.clone();
             GaussianBlur(img, blur_img, Size(5, 5), 0);
-            imwrite(path(dataset_src) / path(to_string(c) + "_blur" + p.path().extension().string()), blur_img);
+            imwrite(path(dataset_src) / path(p.path().filename().string() + "_blur" + p.path().extension().string()),
+                    blur_img);
             c++;
             cout << "\r" << (int) ((float) c / (float) maxfile * 100) << "% : " << p.path().filename();
         }

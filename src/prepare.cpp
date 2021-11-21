@@ -10,7 +10,7 @@ using namespace std;
 using namespace filesystem;
 using namespace cv;
 
-const float TEST_RATIO = 0.2;
+const float TEST_RATIO = 0.5;
 
 int main(int argc, char **argv) {
     string dataset_path;
@@ -80,9 +80,13 @@ void process_data(string path_to_dataset, string label) {
         }
         cvtColor(img, gray, COLOR_RGB2GRAY);
         create_directories(writePath);
-        imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
         i++;
         cout << "\r" << (int) ((float) i / (float) maxfile * 100) << "% : " << p.path().filename();
+        try {
+            imwrite(path(writePath) / path(to_string(i) + p.path().extension().string()), img);
+        } catch (Exception) {
+            continue;
+        }
     }
     cout << endl;
 }
