@@ -63,9 +63,9 @@ void segment(Mat src, string path_to_descriptor, string path_to_label) {
 
     int width = src.cols;
     int height = src.rows;
-    //int GRID_SIZE = 60;
+    int GRID_SIZE = 60;
     //int GRID_SIZE = 30;
-    int GRID_SIZE = 15;
+    //int GRID_SIZE = 15;
 
     vector<Mat> data;
     cout << endl;

@@ -28,9 +28,11 @@ int lbp_encode_pixel(Mat img, int x, int y) {
 
 Mat img_2_lbp_mat(Mat &img) {
     Mat my_mat((img.rows - 2), (img.cols - 2), CV_8UC1);
+    int pixel_count = 0;
     for (int y = 1; y < img.rows - 1; y++) {
         for (int x = 1; x < img.cols - 1; x++) {
-            my_mat.at<Vec3b>(y, x) = lbp_encode_pixel(img, x, y);
+            my_mat.at<uchar>(pixel_count) = lbp_encode_pixel(img, x, y);
+            pixel_count++;
         }
     }
     return my_mat;
@@ -43,7 +45,7 @@ void img_2_lbp_hist(Mat &img, float lbpHist[256]) {
             lbpHist[decimal_value] = lbpHist[decimal_value] + 1;
         }
     }
-    normalize_hist(img, lbpHist);
+    //normalize_hist(img, lbpHist);
 }
 
 void txt_vector_2_vector(string descriptor, float v[256]) {

@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         cout << "Wrong arguments" << endl;
         return EXIT_FAILURE;
     }
-    Mat my_image = imread(file_path);
+    Mat my_image = imread(file_path, IMREAD_GRAYSCALE);
     cout << "\x1B[32m-- START GUESSING --\033[0m" << endl;
     cout << "\x1B[33mGUESSING IMAGE: \033[0m" << file_path << endl;
     guess(my_image, descriptor_path, label_path);
