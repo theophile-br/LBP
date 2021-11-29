@@ -55,17 +55,19 @@ int main(int argc, char **argv) {
     Mat my_image = imread(file_path);
     cout << "\x1B[32m-- START SEGMENTATION --\033[0m" << endl;
     cout << "\x1B[33mSEGMENT IMAGE: \033[0m" << file_path << endl;
-    segment(my_image, descriptor_path, label_path);
+    cout << "GRID_SIZE :  "<< 60 << endl;
+    segment(my_image, descriptor_path, label_path, 60);
+    cout << "GRID_SIZE :  "<< 30 << endl;
+    segment(my_image, descriptor_path, label_path, 30);
+    cout << "GRID_SIZE :  "<< 15 << endl;
+    segment(my_image, descriptor_path, label_path, 15);
     return EXIT_SUCCESS;
 }
 
-void segment(Mat src, string path_to_descriptor, string path_to_label) {
+void segment(Mat src, string path_to_descriptor, string path_to_label, int GRID_SIZE) {
 
     int width = src.cols;
     int height = src.rows;
-    int GRID_SIZE = 60;
-    //int GRID_SIZE = 30;
-    //int GRID_SIZE = 15;
 
     vector<Mat> data;
     cout << endl;

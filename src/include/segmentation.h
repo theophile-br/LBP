@@ -8,7 +8,7 @@
 #include <string>
 #include <opencv2/core/mat.hpp>
 
-void segment(cv::Mat my_image, std::string path_to_descriptor, std::string path_to_label);
+void segment(cv::Mat my_image, std::string path_to_descriptor, std::string path_to_label, int GRID_SIZE);
 
 int guess(cv::Mat img, std::string path_to_descriptor, std::string path_to_label);
 
